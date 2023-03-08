@@ -1,4 +1,3 @@
-
 import Hash from '@ioc:Adonis/Core/Hash'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { schema, rules } from '@ioc:Adonis/Core/Validator'
@@ -7,12 +6,8 @@ import Route from '@ioc:Adonis/Core/Route'
 import Mail from '@ioc:Adonis/Addons/Mail'
 import Env from '@ioc:Adonis/Core/Env'
 
-
-
-
 export default class UsersController
 {
-
     public async register({ request, response }: HttpContextContract)
     {
         const validationSchema = schema.create({
@@ -183,13 +178,16 @@ export default class UsersController
 
     public async mostrarUsuarios({ response }: HttpContextContract)
     {
-        try {
-            const users = await User.all();
+        try 
+        {
+            const users = await User.query().orderBy('id', 'asc');
             return users;
         }
-        catch (error) {
-            return response.status(400).json({
-                message: 'Error al obtener los usuarios',
+
+        catch (error)
+        {
+            return response.badRequest({
+                message: 'Error al obtener los usuarios.',
                 data: error,
             });
         }
@@ -197,17 +195,20 @@ export default class UsersController
 
     public async eliminarUsuario({ params, response }: HttpContextContract)
     {
-        try {
+        try 
+        {
             const user = await User.findOrFail(params.id);
             await user.delete();
+
             return response.status(200).json({
-                message: 'Usuario eliminado correctamente',
+                message: 'Usuario eliminado correctamente.',
                 data: user,
             });
         }
-        catch (error) {         
-            return response.status(400).json({
-                message: 'Error al eliminar el usuario',
+        catch(error) 
+        {         
+            return response.badRequest({
+                message: 'Error al eliminar el usuario.',
                 data: error,
             });
         }
@@ -215,21 +216,23 @@ export default class UsersController
 
     public async cambiarRol ({ params, request, response }: HttpContextContract)
     {
-        try {
+        try 
+        {
             const validationSchema = schema.create({
                 role: schema.number([
                     rules.required()
                 ]),
             })
-            const data = await request.validate({
-                schema: validationSchema,
-                messages: {
-                    'role.required': 'El rol es requerido',
-                    'role.number': 'El rol debe ser un número',
-                },
-            });
 
-
+            const data = await request.validate(
+                {
+                    schema: validationSchema,
+                    messages: {
+                        'role.required': 'El rol es requerido',
+                        'role.number': 'El rol debe ser un número',
+                    },
+                }
+            );
 
             const user = await User.findOrFail(params.id);
             
@@ -238,22 +241,26 @@ export default class UsersController
                 const role = request.input('role');
                 user.role = role;
                 await user.save();
+
                 return response.status(200).json({
                     message: 'Rol cambiado correctamente',
                     data: user,
                 });
             }
+
             else
             {
-                return response.status(400).json({
-                    message: 'Error al cambiar el rol',
+                return response.badRequest({
+                    message: 'Error al cambiar el rol.',
                     data: null,
                 });
             }
         }
-        catch (error) {
-            return response.status(400).json({
-                message: 'Error al cambiar el rol',
+
+        catch(error) 
+        {
+            return response.badRequest({
+                message: 'Error al cambiar el rol.',
                 data: error,
             });
         }
@@ -261,64 +268,71 @@ export default class UsersController
     }
 
     public async cambiarStatus ({ params, request, response }: HttpContextContract)
-       {
-              try {
-                        const validationSchema = schema.create({
-                                status: schema.number([
-                                    rules.required()
-                                ]),
-                        })
-                        const data = await request.validate({
-                                schema: validationSchema,
-                                messages: {
-                                    'status.required': 'El status es requerido',
-                                    'status.number': 'El status debe ser un número',
-                                },
-                        });
-                        const user = await User.findOrFail(params.id);
-                        if(user)
-                        {
-                                const status = request.input('status');
-                                user.status = status;
-                                await user.save();
-                                return response.status(200).json({
-                                    message: 'Status cambiado correctamente',
-                                    data: user,
-                                });
-                        }
-                        else
-                        {
-                                return response.status(400).json({
-                                    message: 'Error al cambiar el status',
-                                    data: null,
-                                });
-                        }
-                }
-                catch (error) {
-                        return response.status(400).json({
-                            message: 'Error al cambiar el status',
-                            data: error,
-                        });
-                }
+    {
+        try 
+        {
+            const validationSchema = schema.create({
+                status: schema.number([
+                    rules.required()
+                ]),
+            })
 
-       }
+            const data = await request.validate(
+                {
+                    schema: validationSchema,
+                    messages: {
+                        'status.required': 'El rol es requerido',
+                        'status.number': 'El rol debe ser un número',
+                    },
+                }
+            );
+
+            const user = await User.findOrFail(params.id);
+            
+            if(user)
+            {
+                const status = request.input('status');
+                user.status = status;
+                await user.save();
+
+                return response.status(200).json({
+                    message: 'Status cambiado correctamente.',
+                    data: user,
+                });
+            }
+
+            else
+            {
+                return response.badRequest({
+                    message: 'Error al cambiar el status.',
+                    data: null,
+                });
+            }
+        }
+
+        catch(error) 
+        {
+            return response.badRequest({
+                message: 'Error al cambiar el status.',
+                data: error,
+            });
+        }
+    }
        
-       public async mostrarUsuario({ params, response }: HttpContextContract)
-       {
-           try {
-               const user = await User.findOrFail(params.id);
-               return response.status(200).json({
-                   message: 'Usuario obtenido correctamente',
-                   data: user,
-               });
-           }
-           catch (error) {
-               return response.status(400).json({
-                   message: 'Error al obtener el usuario',
-                   data: error,
-               });
-           }
-           
-       }
+    public async mostrarUsuario({ params, response }: HttpContextContract)
+    {
+        try 
+        {
+            const user = await User.findOrFail(params.id);
+            return user;
+        }
 
+        catch(error) 
+        {
+            return response.badRequest({
+                message: 'Error al obtener el usuario.',
+                data: error,
+            });
+        }  
+    }
 }
