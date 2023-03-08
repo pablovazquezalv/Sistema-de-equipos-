@@ -150,7 +150,7 @@ export default class PartidosController
         .from('partidos')
         .join('equipos', 'equipos.id', '=', 'partidos.local')
         .join('equipos as visitante', 'visitante.id', '=', 'partidos.visitante')
-        .select('partidos.id','equipos.nombre as local','visitante.nombre as visitante','partidos.fecha','partidos.hora')
+        .select('partidos.id','equipos.nombre as local','visitante.nombre as visitante',Database.raw("date_format(partidos.fecha, '%Y-%m-%d') as fecha"),'partidos.hora')
         .orderBy('partidos.id', 'asc')
 
         if(partido)

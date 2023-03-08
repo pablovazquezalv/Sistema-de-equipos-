@@ -207,7 +207,7 @@ export default class JugadoresController
         const jugadores = await Database
         .from('jugadors')
         .join('equipos', 'jugadors.equipo', '=', 'equipos.id')
-        .select('jugadors.id', 'jugadors.nombre','jugadors.ap_paterno','jugadors.ap_materno','jugadors.sexo','jugadors.f_nac','equipos.nombre as equipo', 'equipos.id as equipo_id')
+        .select('jugadors.id', 'jugadors.nombre','jugadors.ap_paterno','jugadors.ap_materno','jugadors.sexo',Database.raw("date_format(jugadors.f_nac, '%Y-%m-%d') as f_nac"),'equipos.nombre as equipo', 'equipos.id as equipo_id')
         .orderBy('jugadors.id', 'asc')
 
         if(jugadores)
