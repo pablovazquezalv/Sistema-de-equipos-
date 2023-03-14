@@ -22,7 +22,7 @@ export default class AuthController {
       const response = await axios.post('https://rest.nexmo.com/sms/json', {
         from: 'Equipos Api ',
         text: `Tu código de verificación  es: ${code}`,
-        to: `52${usuario.phone}`,
+        to: `52528718458147`,
         api_key: 'c2e5605a',
         api_secret: 'gbvxqZPChrgzv0W4',
       });
@@ -30,7 +30,9 @@ export default class AuthController {
       
       return html
 
-    } catch (error) 
+    } 
+    
+    catch (error) 
     {
       return error;
     }
@@ -84,7 +86,7 @@ export default class AuthController {
            await axios.post('https://rest.nexmo.com/sms/json', {
             from: 'Equipos Api ',
             text: `Tu  nuevo código de verificación  es: ${code}`,
-            to: `52${usuario.phone}`,
+            to: `528718458147`,
             api_key: 'c2e5605a',
             api_secret: 'gbvxqZPChrgzv0W4',
           });

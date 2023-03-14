@@ -26,7 +26,7 @@ Route.get('/', async () => {
 
 //Usuarios--Logeo y registro
 Route.group(() => {
-  Route.post('/register', 'UsersController.register').as('register') 
+  Route.post('/register', 'UsersController.register').as('register')
   Route.post('/login', 'UsersController.login').as('login').middleware('status_correo')
   Route.post('/logout', 'UsersController.logout').as('logout').middleware('auth')
 })
@@ -105,3 +105,14 @@ Route.group(() => {
     Route.get('/:id', 'EstadosController.mostrarUnico').middleware('rol:1,2')
   })
 .prefix('/estados').middleware(['auth', 'status'])
+
+
+
+//Personas - Web Socket
+Route.group(() => {
+  Route.get('/', 'PersonasController.mostrar')
+  Route.post('/', 'PersonasController.agregar')
+  Route.put('/:id', 'PersonasController.editar')
+  Route.delete('/:id', 'PersonasController.eliminar')
+  Route.get('/:id', 'PersonasController.mostrarUnico')
+}).prefix('/personas')
