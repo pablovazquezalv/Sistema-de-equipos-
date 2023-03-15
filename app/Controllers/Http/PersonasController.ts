@@ -222,6 +222,6 @@ export default class PersonasController {
 
         const personas = await Persona.query().orderBy('id', 'asc');
 
-    response.send(`event: notice\ndata: ${JSON.stringify(personas)}\n\n`);
+        response.send(`event: notice\ndata: ${JSON.stringify(personas)}\n\n`);
     }
 }

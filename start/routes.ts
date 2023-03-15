@@ -115,5 +115,6 @@ Route.group(() => {
   Route.put('/:id', 'PersonasController.editar')
   Route.delete('/:id', 'PersonasController.eliminar')
   Route.get('/:id', 'PersonasController.mostrarUnico')
-Route.get('/eventos', 'PersonasController.eventos')
 }).prefix('/personas')
+
+Route.get('/eventos', 'PersonasController.eventos')
