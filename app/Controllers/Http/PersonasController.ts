@@ -213,4 +213,15 @@ export default class PersonasController {
             return response.notFound({ message: 'La persona no existe.' });
         }
     }
+
+    public async eventos({response}:HttpContextContract)
+    {
+        response.header('Content-Type', 'text/event-stream');
+        response.header('Cache-Control', 'no-cache');
+        response.header('Connection', 'keep-alive');
+
+        const personas = await Persona.query().orderBy('id', 'asc');
+
+    response.send(`event: notice\ndata: ${JSON.stringify(personas)}\n\n`);
+    }
 }
