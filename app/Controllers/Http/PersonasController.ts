@@ -76,7 +76,7 @@ export default class PersonasController {
             persona.sexo = sexo;
             await persona.save();
           
-            Ws.io.emit('new:persona', persona);    
+            Ws.io.emit('new:persona', persona);
             return response.status(201).json({ data: persona });
         }
 
@@ -157,6 +157,7 @@ export default class PersonasController {
                 persona.sexo = data.sexo;
                 await persona.save();
 
+                Ws.io.emit('new:persona', persona);
                 return response.ok({ data: persona });
             }
   
@@ -176,6 +177,7 @@ export default class PersonasController {
         if(persona)
         {        
             await persona.delete()
+            Ws.io.emit('new:persona', persona);
             return response.ok({ message:"La persona se eliminó correctamente." });
         }
         return response.notFound({ message:"La persona no existe." });
