@@ -1,6 +1,7 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { schema, rules } from '@ioc:Adonis/Core/Validator'
 import Persona from 'App/Models/Persona';
+import Ws from 'App/Services/Ws';
 
 export default class PersonasController {
     public async agregar({ request, response }: HttpContextContract) 
@@ -75,6 +76,7 @@ export default class PersonasController {
             persona.sexo = sexo;
             await persona.save();
           
+            Ws.io.emit('new:persona', persona);    
             return response.status(201).json({ data: persona });
         }
 
@@ -158,7 +160,7 @@ export default class PersonasController {
                 return response.ok({ data: persona });
             }
   
-            return response.notFound({ message: 'El propietario no existe.' });
+            return response.notFound({ message: 'La persona no existe.' });
         }
 
         catch (error) 
@@ -174,9 +176,9 @@ export default class PersonasController {
         if(persona)
         {        
             await persona.delete()
-            return response.ok({ message:"El propietario se eliminó correctamente." });
+            return response.ok({ message:"La persona se eliminó correctamente." });
         }
-        return response.notFound({ message:"El propietario no existe." });
+        return response.notFound({ message:"La persona no existe." });
         
     }
 
@@ -191,7 +193,7 @@ export default class PersonasController {
 
         else
         {
-            return response.notFound({ message: 'No hay propietaripos registrados.' });
+            return response.notFound({ message: 'No hay personas registradas.' });
         }
     }
 
@@ -206,7 +208,7 @@ export default class PersonasController {
 
         else
         {
-            return response.notFound({ message: 'El propietario no existe.' });
+            return response.notFound({ message: 'La persona no existe.' });
         }
     }
 }
