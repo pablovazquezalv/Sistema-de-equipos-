@@ -220,8 +220,9 @@ export default class PersonasController {
         response.header('Cache-Control', 'no-cache');
         response.header('Connection', 'keep-alive');
 
-        const personas = await Persona.query().orderBy('id', 'asc');
-
-        response.send(`event: notice\ndata: ${JSON.stringify(personas)}\n\n`);
+        //const personas = await Persona.query().orderBy('id', 'asc');
+        //response.send(`event: notice\ndata: ${JSON.stringify(personas)}\n\n`);
+        
+        response.send('event: notice\ndata: Se han actualizado los datos')
     }
 }
