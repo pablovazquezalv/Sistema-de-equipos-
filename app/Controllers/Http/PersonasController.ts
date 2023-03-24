@@ -2,8 +2,10 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { schema, rules } from '@ioc:Adonis/Core/Validator'
 import Persona from 'App/Models/Persona';
 import Ws from 'App/Services/Ws';
+import Event from '@ioc:Adonis/Core/Event';
 
 export default class PersonasController {
+   
     public async agregar({ request, response }: HttpContextContract) 
     {
         const validationSchema = schema.create
@@ -77,6 +79,9 @@ export default class PersonasController {
             await persona.save();
           
             Ws.io.emit('new:persona', persona);
+            Event.emit('Persona', persona);
+
+
             return response.status(201).json({ data: persona });
         }
 
@@ -225,4 +230,24 @@ export default class PersonasController {
         
         response.send('event: notice\ndata: Se han actualizado los datos')
     }
+     
+    public async streamPersonas({ response })
+    {
+        const stream = response.response;
+        stream.writeHead(200, {
+          "Access-Control-Allow-Origin":"*",
+          "Content-Type": "text/event-stream",
+          "Cache-Control": "no-cache",
+          "Connection": "keep-alive",
+        });
+        
+        Event.on("Persona", (Persona) => {
+            stream.write(`event: Persona\ndata: ${JSON.stringify(Persona)}\n\n`);
+           // console.log('Se recibió un nuevo Persona:', Persona);
+          });   
+        
+       
+      }
+     
+    
 }

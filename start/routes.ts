@@ -116,5 +116,4 @@ Route.group(() => {
   Route.delete('/:id', 'PersonasController.eliminar')
   Route.get('/:id', 'PersonasController.mostrarUnico')
 }).prefix('/personas')
-
-Route.get('/eventos', 'PersonasController.eventos')
+Route.get('/stream', 'PersonasController.streamPersonas')
